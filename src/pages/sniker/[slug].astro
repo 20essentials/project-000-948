@@ -1,0 +1,103 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { baseUrl } from '@/utils/functions';
+import { getCollection, render } from 'astro:content';
+export async function getStaticPaths() {
+  const shoes = await getCollection('shoes');
+  console.log(shoes);
+  return shoes.map(shoe => ({
+    params: { slug: shoe.slug },
+    props: { shoe }
+  }));
+}
+const { shoe } = Astro.props;
+const { slug } = Astro.params;
+const { img, name, style } = shoe.data;
+
+const numeroRandom = Math.floor(Math.random() * (999 - 99 + 1)) + 99;
+const money = numeroRandom.toLocaleString('en-US', {
+  style: 'currency',
+  currency: 'USD'
+});
+---
+
+<Layout title={style}>
+  <section class='contenedor'>
+    <aside class='left'>
+      <a transition:name={`sniker - ${slug}`}>
+        <img src={baseUrl(`/sneaker/${img}`)} />
+      </a>
+    </aside>
+    <aside class='right'>
+      <h1>{name}</h1>
+      <h2>{money}</h2>
+    </aside>
+  </section>
+</Layout>
+
+<style>
+  .contenedor {
+    height: 100vh;
+    display: flex;
+    width: 80%;
+    margin-inline: auto;
+
+    @media (width <= 1111px) and (orientation: portrait) {
+      flex-direction: column-reverse;
+    }
+  }
+
+  .left,
+  .right {
+    width: 50%;
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    place-content: center;
+
+    @media (width <= 1111px) and (orientation: portrait) {
+      width: 100%;
+      height: 50vh;
+    }
+  }
+
+  .left {
+    @media (width <= 1111px) and (orientation: portrait) {
+      align-content: start;
+    }
+
+    img {
+      width: 30vmax;
+      height: 30vmax;
+      border-radius: 1.7vmax;
+      filter: grayscale(0.2);
+      transition: filter 0.3s ease;
+
+      &:hover {
+        filter: grayscale(0) brightness(115%);
+      }
+    }
+  }
+
+  .right {
+    flex-direction: column;
+    gap: 1.4vmax;
+
+    @media (width <= 1111px) and (orientation: portrait) {
+      justify-content: end;
+      padding-bottom: 10vmax;
+    }
+
+    h1,
+    h2 {
+      font-size: 3vmax;
+      color: transparent;
+      background-clip: text;
+      background-image: var(--first-gradient);
+      font-size: 4vmax;
+      text-wrap: balance;
+      text-align: center;
+      width: 100%;
+    }
+  }
+</style>

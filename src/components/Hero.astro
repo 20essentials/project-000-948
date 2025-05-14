@@ -1,0 +1,65 @@
+---
+import { baseUrl } from '@/utils/functions';
+const videourl = baseUrl('/assets/vid1.mp4');
+---
+
+<section>
+  <aside class='left'>
+    <h1>Lender Custom Sneakers</h1>
+  </aside>
+  <video src={videourl} autoplay muted loop class='right'></video>
+</section>
+
+<style>
+  section {
+    height: 100vh;
+    position: relative;
+    scroll-snap-align: center;
+    display: flex;
+
+    @media (width <= 1111px) and (orientation: portrait) {
+      flex-direction: column;
+    }
+
+    .right {
+      width: 50%;
+      height: 100vh;
+      position: relative;
+      aspect-ratio: 9 / 16;
+      mask-image: linear-gradient(to bottom, white 80%, transparent 99%);
+
+      @media (width <= 1111px) and (orientation: portrait) {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+      }
+    }
+
+    .left,
+    .right {
+      width: 50%;
+      height: 100vh;
+
+      @media (width <= 1111px) and (orientation: portrait) {
+        width: 100%;
+        height: 50vh;
+      }
+    }
+
+    .left {
+      position: relative;
+
+      h1 {
+        position: absolute;
+        color: transparent;
+        background-clip: text;
+        background-image: var(--first-gradient);
+        font-size: 4vmax;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-wrap: balance;
+        text-align: center;
+      }
+    }
+  }
+</style>

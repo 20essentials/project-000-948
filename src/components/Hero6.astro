@@ -1,0 +1,80 @@
+---
+import { baseUrl } from '@/utils/functions';
+import { getCollection } from 'astro:content';
+const allShoes = await getCollection('shoes');
+---
+
+<section>
+  {
+    Array.from({ length: Math.ceil(allShoes.slice(0, 28).length / 7) }).map(
+      (_, columnIndex) => {
+        const group = allShoes.slice(columnIndex * 7, columnIndex * 7 + 7);
+        return (
+          <aside class='column' style={{ '--t': `${columnIndex}` }}>
+            {group.map(({ data, slug }) => {
+              const { img } = data;
+              return (
+                <a transition:name={`sniker - ${slug}`} href={baseUrl(`/sniker/${slug}`)}>
+                  <img src={baseUrl(`/sneaker/${img}`)} />
+                </a>
+              );
+            })}
+          </aside>
+        );
+      }
+    )
+  }
+</section>
+
+<style>
+  @keyframes toTop {
+    0% {
+      transform: translateY(8vmax);
+    }
+    100% {
+      transform: translateY(0vmax);
+    }
+  }
+
+  section {
+    min-height: 100vh;
+    height: max-content;
+    position: relative;
+    scroll-snap-align: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17vmax, 1fr));
+    
+    padding: 5vmax;
+    gap: 1.5vmax;
+    padding-bottom: 18vmax;
+
+    @media (width <= 1111px) and (orientation: portrait) {
+      padding: 2vmax;
+      padding-bottom: 10vmax;
+      grid-template-columns: repeat(auto-fit, minmax(14vmax, 1fr));
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5vmax;
+      transform: translateY(calc(var(--t) * 5vmax));
+
+      img {
+        aspect-ratio: 1;
+        width: 100%;
+        height: 100%;
+        border-radius: 0.7vmax;
+        filter: grayscale(0.2);
+        transition: filter 0.3s ease;
+        animation: toTop auto linear forwards;
+        animation-timeline: view();
+        animation-range: entry 0% entry 50%;
+
+        &:hover {
+          filter: grayscale(0) brightness(115%);
+        }
+      }
+    }
+  }
+</style>

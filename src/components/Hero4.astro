@@ -1,0 +1,27 @@
+---
+import { baseUrl } from '@/utils/functions';
+const urlPrice = baseUrl('/assets/fondo.png')
+---
+
+<section>
+  <img src={urlPrice} alt="Image Prices" draggable="false"/>
+</section>
+
+<style>
+  section {
+    height: 100vh;
+    position: relative;
+    scroll-snap-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    place-content: center;
+
+    img {
+      width: 60%;
+
+      @media (width <= 1111px) and (orientation: portrait) {
+        width: 80%;
+      }
+    }
+  }
+</style>

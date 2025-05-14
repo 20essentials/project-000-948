@@ -1,0 +1,128 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { baseUrl } from '@/utils/functions';
+import { getCollection } from 'astro:content';
+const arrayOfCollections: CollectionEntry<'shoes'>[] =
+  await getCollection('shoes');
+const arrayOfImages = arrayOfCollections
+  .map(({ data }) => data.img)
+  .slice(10, 19);
+---
+
+<section>
+  <aside class='left'>
+    <h1>We have what you want</h1>
+  </aside>
+  <aside class='right'>
+    <div class='grid-2'>
+      {
+        arrayOfImages.map((img, ind) => (
+          <article class='item'>
+            <img src={baseUrl(`/sneaker/${img}`)} alt={`Image ${ind}`} />
+          </article>
+        ))
+      }
+    </div>
+  </aside>
+</section>
+
+<style>
+  section {
+    height: 100vh;
+    position: relative;
+    scroll-snap-align: center;
+    display: flex;
+
+    @media (width <= 1111px) and (orientation: portrait) {
+      flex-direction: column;
+    }
+
+    .left,
+    .right {
+      width: 50%;
+      height: 100vh;
+    }
+
+    .left {
+      position: relative;
+
+      @media (width <= 1111px) and (orientation: portrait) {
+        width: 100%;
+        height: 50vh;
+      }
+
+      h1 {
+        position: absolute;
+        color: transparent;
+        background-clip: text;
+        background-image: var(--first-gradient);
+        font-size: 4vmax;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-wrap: balance;
+        text-align: center;
+        width: 70%;
+      }
+    }
+
+    .right {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      place-content: center;
+
+      @media (width <= 1111px) and (orientation: portrait) {
+        width: 100%;
+        height: 50vh;
+        justify-content: center;
+        align-content: start;
+      }
+
+      .grid-2 {
+        --size: 26vmax;
+        width: var(--size);
+        height: var(--size);
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        grid-template-rows: repeat(3, auto);
+        place-content: center;
+        transform: rotate(45deg);
+        transition: 0.5s;
+
+        * {
+          pointer-events: none;
+        }
+
+        article {
+          width: calc(var(--size) / 3);
+          height: calc(var(--size) / 3);
+          background-color: transparent;
+          overflow: hidden;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          transform: rotate(var(--g, -45deg));
+          transition: 0.3s;
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+  let inicial = 90;
+  document.addEventListener('click', e => {
+    const target = e.target as HTMLElement;
+    if (target.matches('.grid-2')) {
+      target.style.transform = `rotate(${inicial}deg)`;
+      let imagenes = target.querySelectorAll('img');
+      imagenes.forEach(el => {
+        el.style.setProperty('--g', `-${inicial}deg`);
+      });
+      inicial += 45;
+    }
+  });
+</script>

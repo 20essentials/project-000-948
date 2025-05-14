@@ -1,0 +1,54 @@
+---
+import '@/styles/global.css';
+import '@fontsource/luckiest-guy';
+import { ClientRouter } from 'astro:transitions';
+import { baseUrl } from '@/utils/functions';
+
+interface Props {
+  title: string;
+}
+
+
+const { title } = Astro.props;
+const canonicalHref = Astro.site;
+const faviconHref = baseUrl('/assets/favicon.webp');
+const metaDescription =
+  'Lender è il primo kit per la personalizzazione delle scarpe in pelle completamente Made in Italy. Scopri le applicazioni ed acquista subito la tua box scegliendo tra più di 60 colori diversi.';
+const siteName = 'Lender - Customize your Sneakers';
+---
+
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width' />
+    <link rel='icon' type='image/svg+xml' href={faviconHref} />
+    <link rel='canonical' href={canonicalHref} />
+    <meta name='description' content={metaDescription} />
+    <title>{title}</title>
+    <meta property='og:site_name' content={siteName} />
+    <meta property='og:url' content={canonicalHref} />
+    <meta property='og:title' content={title} />
+    <meta property='og:type' content='website' />
+    <meta property='og:description' content={metaDescription} />
+    <meta property='og:image' content={faviconHref} />
+    <meta property='og:image:secure_url' content={faviconHref} />
+    <meta property='og:image:width' content='512' />
+    <meta property='og:image:height' content='512' />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:title' content={title} />
+    <meta name='twitter:site' content={canonicalHref} />
+    <meta name='twitter:description' content={metaDescription} />
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+
+<!-- <script>
+  window.addEventListener('resize', e => {
+    document.title = `${window.innerWidth}`;
+  });
+</script> -->
